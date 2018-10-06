@@ -24,22 +24,18 @@
                               (GET
                                 api-url
                                 {:params        {:base (:base (:exchange @app-state))}
-                                 :handler       (fn [response]
-                                                  (swap! app-state assoc-in [:exchange :last-update-date]
-                                                         (-> response (get-in ["date"])))
-
+                                 :handler       (fn [r]
+                                                  (swap! app-state assoc-in [:exchange :last-update-date] (get-in r ["date"]))
                                                                                                           ;; add keys of base rates to atom
-                                                  (swap! app-state assoc-in [:exchange :bases]
-                                                         (-> response (get-in ["rates"]) (keys)))
-
+                                                  (swap! app-state assoc-in [:exchange :bases] (-> r (get-in ["rates"]) (keys)))
                                                                                                           ;; add rates to atom
-                                                  (swap! app-state assoc-in [:exchange :rates]
-                                                         (-> response (get-in ["rates"]))))
+                                                  (swap! app-state assoc-in [:exchange :rates] (get-in r ["rates"])))
 
                                  :error-handler (fn [{:keys [status status-text]}]
                                                   (js/console.error (str "Something Bad happened: " status " " status-text))
                                                   (js/alert (case status
                                                               0 (str status-text. "Please check you internet connection"))))}))
+      
       :reagent-render       (let [selected-option (atom default-base)]
 
                               ;; render 
@@ -99,7 +95,14 @@
                                        [:ul
                                         (map #(vector :li
                                                       {:key (:base %)}
-                                                      (str (* value-to-exchange (:rate %)) " " (:base %))) added-rates)]]
+                                                      [:span 
+                                                       (str (* value-to-exchange (:rate %)) " " (:base %))
+                                                       [:button {:on-click (fn [e]
+                                                                             (swap! app-state update-in
+                                                                                    [:exchange :added-rates]
+                                                                                    disj {:base (:base %)
+                                                                                          :rate (:rate %)}))} "delete"]]
+                                                      ) added-rates)]]
                                       [:p "no rates"])]])))})))
 
 
