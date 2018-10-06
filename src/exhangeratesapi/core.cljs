@@ -99,7 +99,14 @@
                                        [:ul
                                         (map #(vector :li
                                                       {:key (:base %)}
-                                                      (str (* value-to-exchange (:rate %)) " " (:base %))) added-rates)]]
+                                                      [:span 
+                                                       (str (* value-to-exchange (:rate %)) " " (:base %))
+                                                       [:button {:on-click (fn [e]
+                                                                             (swap! app-state update-in
+                                                                                    [:exchange :added-rates]
+                                                                                    disj {:base (:base %)
+                                                                                          :rate (:rate %)}))} "delete"]]
+                                                      ) added-rates)]]
                                       [:p "no rates"])]])))})))
 
 
