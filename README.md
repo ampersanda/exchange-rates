@@ -1,4 +1,5 @@
 # {{name}}
+https://serene-rosalind-551627.netlify.com/
 
 ## Run
 
@@ -22,7 +23,7 @@ yarn release
 
 ## License
 
-Copyright © 2017 FIXME
+Copyright © 2018 Mochamad Lucky Pradana
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
