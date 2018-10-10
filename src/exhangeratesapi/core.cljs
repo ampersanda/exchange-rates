@@ -20,7 +20,7 @@
 
     (reagent/create-class
      {:display-name         "exchange-rates"
-      :component-will-mount (fn [this]
+      :component-did-mount (fn [this]
                               (GET
                                 api-url
                                 {:params        {:base (:base (:exchange @app-state))}
